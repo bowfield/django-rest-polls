@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>New Poll | Admin Panel</title>
+        <style>
+            body { margin: 16px; background: #f5f5f5; }
+            input, select { margin: 4px; padding: 4px; border: 1px solid #e8e8e8; background: #e8f0fe; }
+            #button {
+                background: #00dd61;
+                color: #fff;
+                border: none;
+            }
+            #button:hover { background: #81c995; }
+            input:focus { outline: none; }
+            form {
+                background: #ffffff;
+                padding: 16px;
+                border-radius: 8px;
+            }
+        </style>
+        <script>
+        onload = function() {
+            let t = document.getElementById("type")
+            let a = document.getElementById("answers")
+            t.onchange = function(e) {
+                if(t.selectedIndex == 2) {
+                    a.style.display = 'none'
+                } else {
+                    a.style.display = 'block'
+                }
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <form method="POST" action="/admin/polls/new/">{% csrf_token %}
+            <b>Заголовок:</b><br>
+            <input name="text" type="text" placeholder=""/><br>
+            <b>Тип:</b><br>
+            <select name="type" id="type">
+                <option>single</option>
+                <option>multiple</option>
+                <option>input</option>
+            </select><br>
+            <b>Дата старта:</b><br>
+            <input name="date_start" type="date" placeholder=""/><br>
+            <b>Дата окончания:</b><br>
+            <input name="date_end" type="date" placeholder=""/><br>
+            <div id="answers">
+                <input name="answer1" type="text" placeholder="Ответ 1"/><br>
+                <input name="answer2" type="text" placeholder="Ответ 2"/><br>
+                <input name="answer3" type="text" placeholder="Ответ 3"/><br>
+            </div>
+            <input id="button" type="submit" value="Добавить"/>
+        </form>
+    </body>
+</html>

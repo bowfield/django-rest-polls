@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Auth | Admin Panel</title>
+        <style>
+            body { margin: 16px; background: #f5f5f5; }
+            input { margin: 8px; padding: 4px; border: none; background: #e8f0fe; }
+            #button {
+                width: -webkit-fill-available;
+                background: #00dd61;
+                color: #fff;
+            }
+            .field {
+                border: 1px solid #e8e8e8;
+            }
+            input:focus { outline: none; }
+            #button:hover { background: #81c995; }
+            form {
+                background: #ffffff;
+                padding: 8px;
+                border-radius: 8px;
+                display: -webkit-inline-box;
+            }
+        </style>
+    </head>
+    <body>
+        <form method="POST" action="/admin/">{% csrf_token %}
+            <input class="field" name="username" type="text" placeholder="Username"/><br>
+            <input class="field" name="password" type="password" placeholder="Pasword"/><br>
+            <input id="button" type="submit" value="Войти"/>
+        </form>
+    </body>
+</html>

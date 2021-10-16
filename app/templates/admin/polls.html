@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <title>Polls | Admin Panel</title>
+        <style>
+            body { margin: 16px; background: #f5f5f5; }
+            input { margin: 4px; padding: 4px; border: 1px solid #e8e8e8; background: #e8f0fe; }
+            #button {
+                background: #00dd61;
+                color: #fff;
+                border: none;
+            }
+            #button:hover { background: #81c995; }
+            input:focus { outline: none; }
+            form {
+                background: #ffffff;
+                padding: 16px;
+                border-radius: 8px;
+            }
+        </style>
+        <script>
+            let polls = JSON.parse("{{polls}}")
+            let answers = JSON.parse("{{answers}}")
+
+            function findAnswers(poll_id) {
+                var finded = []
+                for(var i = 0; i < answers.length; i += 1) {
+                    let answer = answers[i]
+                    if(answer.poll == poll_id) {
+                        finded.push(answer)
+                    }
+                }
+                return finded
+            }
+
+            onload = function() {
+                let root = document.getElementById("polls")
+                for(var i = 0; i < polls.length; i += 1) {
+                    let poll = polls[i]
+                    let _answers = findAnswers(poll.id)
+                    let answer1 = _answers[0]
+                    let answer2 = _answers[1]
+                    let answer3 = _answers[2]
+
+                    var html = ""
+                    //html += "<hr noshade size='1' width='400|%' align='left'>"
+                    html += "<form method='POST' action='/admin/polls/'>"
+                    html += document.getElementById("csrf").innerHTML
+                    html += "<b><input style='display: none' name='id' value='" + poll.id + "'/></b>"
+
+                    html += "<b>Заголовок: <input name='text' value='" + poll.text + "'/></b>"
+
+                    html += "(Тип: " + poll.type
+                    html += ", Id: " + poll.id + ")"
+                    // html += "<br><b>Тип: <select name='type' id='type_" + i + "'>"
+                    // html += "<option " + (poll.type == "single" ? "selected" : "" ) + ">single</option>"
+                    // html += "<option " + (poll.type == "multiple" ? "selected" : "" ) + ">multiple</option>"
+                    // html += "<option " + (poll.type == "input" ? "selected" : "" ) + ">input</option>"
+                    // html += "</select>"
+
+                    html += "<br><b>Окончание: <input name='end_date' type='date' value='" + poll.end_date + "'/>"
+                    html += "<br>"
+
+                    if(poll.type == "input") {
+                        html += "<ul  style='display: none;'>"
+                        html += "<li><input name='answer1' style='display: none;' value=''/></li>"
+                        html += "<li><input name='answer2' style='display: none;' value=''/></li>"
+                        html += "<li><input name='answer3' style='display: none;' value=''/></li>"
+                        html += "</ul>"
+                    } else {
+                        html += "<ul>"
+                        html += "<li><input name='answer1' value='" + answer1.text + "'/></li>"
+                        html += "<li><input name='answer2' value='" + answer2.text + "'/></li>"
+                        html += "<li><input name='answer3' value='" + answer3.text + "'/></li>"
+                        html += "</ul>"
+                    }
+
+                    html += "<input id='button' type='submit' value='Изменить'/>"
+                    html += "</form>";
+
+                    root.innerHTML += html
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <span id="csrf" style="display: none;">{% csrf_token %}</span>
+        <a href="/admin/polls/new/">
+            <input id='button' type="button" value="Добавить опрос"/>
+        </a>
+        <br>
+        <div id="polls">
+
+        </div>
+    </body>
+</html>
