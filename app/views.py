@@ -7,7 +7,7 @@ from datetime import datetime
 from .serializers import PollSerializer, AnswerSerializer, UserSerializer
 import json
 
-# new API
+# API
 
 # view для получения списка опросов
 class PollView(APIView):
@@ -21,14 +21,14 @@ class AnswerView(APIView):
     def post(self, request):
         user_id = request.data.get('user_id')
 
-        answer_simple = request.data.get('answer_simple')
+        answer_single = request.data.get('answer_single')
         answer_multiple = request.data.get('answer_multiple')
         answer_input = request.data.get('answer_input')
 
-        if answer_simple != None: # single
+        if answer_single != None: # single
             data = {
-                "real_id": answer_simple['user_id'],
-                "answer": answer_simple['answer_id']
+                "real_id": answer_single['user_id'],
+                "answer": answer_single['answer_id']
             }
             serializer = UserSerializer(data=data)
 
@@ -67,6 +67,7 @@ class AnswerView(APIView):
         if answer_input != None: # input
             data = {
                 "real_id": answer_input['user_id'],
+                "answer_id": answer_input['answer_id'],
                 "answer": -1,
                 "value": answer_input['answer_input']
             }
@@ -77,7 +78,7 @@ class AnswerView(APIView):
 
             answers = PollAnswer.objects.all()
             for answer in answers:
-                if answer.id == data['answer']:
+                if answer.id == data['answer_id']:
                     saved.el = answer
                     saved.save()
 
