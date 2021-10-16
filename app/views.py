@@ -93,9 +93,11 @@ class MeView(APIView):
         l = []
 
         for usr in User.objects.filter(real_id=user_id):
-            answ = PollAnswer.objects.filter(id=usr.answer)[0]
-            serializer = AnswerSerializer(answ)
-            l.append(serializer.data)
+            answ_ = PollAnswer.objects.filter(id=usr.answer)
+            if len(answ_) > 0:
+                answ = answ_[0]
+                serializer = AnswerSerializer(answ)
+                l.append(serializer.data)
 
         return Response({"data": l})
 
